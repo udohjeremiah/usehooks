@@ -153,7 +153,12 @@ declare module "@uidotdev/usehooks" {
 
   export function useDocumentTitle(title: string): void;
 
-  export function useFavicon(url: string): void;
+  export function useFavicon(
+    url: string,
+    options?: {
+      temporary?: boolean;
+    }
+  ): void;
 
   export function useGeolocation(options?: PositionOptions): GeolocationState;
 

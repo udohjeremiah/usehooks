@@ -268,18 +268,34 @@ export function useDocumentTitle(title) {
   }, [title]);
 }
 
-export function useFavicon(url) {
+export function useFavicon(url, options = {}) {
+  const optionsRef = React.useRef(options);
+
   React.useEffect(() => {
     let link = document.querySelector(`link[rel~="icon"]`);
+    let created = false;
 
     if (!link) {
       link = document.createElement("link");
       link.type = "image/x-icon";
       link.rel = "icon";
-      link.href = url;
       document.head.appendChild(link);
-    } else {
-      link.href = url;
+      created = true;
+    }
+
+    const original = link.href;
+    link.href = url;
+
+    const { temporary } = optionsRef.current;
+
+    if (temporary) {
+      return () => {
+        if (created) {
+          link.remove();
+        } else {
+          link.href = original;
+        }
+      };
     }
   }, [url]);
 }
